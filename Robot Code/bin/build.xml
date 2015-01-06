@@ -1,0 +1,7 @@
+<project name="default" default="default">
+    <target name="default">
+        <java classname="net.frc2914.robot" fork="true" failonerror="true">
+            <classpath><fileset dir="lib" includes="**/*.jar"/></classpath>
+        </java>
+    </target>
+</project>
