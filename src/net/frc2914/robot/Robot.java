@@ -1,6 +1,11 @@
 
 package net.frc2914.robot;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import net.frc2914.configuration.Configuration;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
 
@@ -17,6 +22,16 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
+    	try {
+			Configuration.loadProperties(new File("/home/lvuser/robot.properties"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	System.out.println(Configuration.getProperty("greeting_message"));
     }
 
     /**
