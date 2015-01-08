@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import net.frc2914.configuration.Configuration;
+import net.frc2914.services.ServiceManager;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
 
@@ -25,13 +26,12 @@ public class Robot extends IterativeRobot {
     	try {
 			Configuration.loadProperties(new File("/home/lvuser/robot.properties"));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	System.out.println(Configuration.getProperty("greeting_message"));
+    	new ServiceManager().start();
     }
 
     /**

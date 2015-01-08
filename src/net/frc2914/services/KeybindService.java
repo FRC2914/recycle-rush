@@ -8,4 +8,10 @@ public class KeybindService extends Service {
 		
 	}
 
+	@Override
+	public void init() {
+		System.out.println("Initializing keybind service");
+		
+	}
+
 }

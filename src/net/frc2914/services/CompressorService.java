@@ -8,4 +8,9 @@ public class CompressorService extends Service {
 		
 	}
 
+	@Override
+	public void init() {
+		System.out.println("initializing compressor service");
+	}
+
 }

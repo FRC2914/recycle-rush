@@ -1,19 +1,32 @@
 package net.frc2914.services;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 import net.frc2914.configuration.Configuration;
 
 public class ServiceManager extends Thread{
-	private static Map<String, Service> services = new HashMap<String, Service>();
+	private static List<Service> services = new ArrayList<Service>();
 	static{
-		services.put("keybind", new KeybindService());
-		services.put("compressor", new CompressorService());
+		services.add(new KeybindService());
+		services.add(new CompressorService());
 	}
 	
 	@Override
 	public void run() {
-		long statusTimer = Long.parseLong(Configuration.getProperty("service_status_interval"));
+		services.parallelStream().forEach((service) -> service.init());
+		long frameLength = Long.parseLong(Configuration.getProperty("frame_length"));
+		while(true){
+			long frameStart = System.currentTimeMillis();
+			services.parallelStream().forEach((service) -> service.update());
+			try {
+				sleep(frameLength - (System.currentTimeMillis() - frameStart));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		
 	}
 	
