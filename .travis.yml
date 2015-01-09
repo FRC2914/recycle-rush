@@ -1,6 +1,7 @@
 language: java
+before_install:
+  - sudo apt-get remove ant
+  - sudo apt-get update && sudo apt-get install ant
 jdk:
   - oraclejdk8
-before_install:
-  - sudo apt-get update && sudo apt-get install ant
 script: ant compile
