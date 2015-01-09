@@ -3,8 +3,7 @@ before_install:
   - wget http://apache.heikorichter.name/ant/binaries/apache-ant-1.8.4-bin.tar.gz
   - tar xvfz apache-ant-1.8.4-bin.tar.gz
   - sudo mv apache-ant-1.8.4 /usr/local
-  - echo "ANT_HOME=\"/usr/local/apache-ant-1.8.4\"
-PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:$ANT_HOME/bin\"" >> ~/.profile
+  - echo "ANT_HOME=\"/usr/local/apache-ant-1.8.4\" PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:$ANT_HOME/bin\"" >> ~/.profile
   - source ~/.profile
   - ant -version
 jdk:
