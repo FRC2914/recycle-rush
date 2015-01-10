@@ -2,7 +2,7 @@ language: java
 before_install:
   - sudo apt-get remove ant
   - cd /opt/
-  - wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.0-bin.tar.gz
+  - sudo wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.0-bin.tar.gz
   - tar xzf apache-ant-1.9.0-bin.tar.gz
   - mv apache-ant-1.9.0 /usr/local/apache-ant
   - echo 'export ANT_HOME=/usr/local/apache-ant' >> /etc/bashrc
