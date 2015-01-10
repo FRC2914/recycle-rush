@@ -63,9 +63,9 @@
      includeAntRuntime="no"
      includeJavaRuntime="no"
      classpath="${classpath}"
-     target="8"
-     source="8"
-     compiler="javac8"
+     target="${ant.java.version}"
+     source="${ant.java.version}"
+     compiler="javac${ant.java.version}"
      debug="true">
     </javac>
   </target>
