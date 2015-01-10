@@ -1,5 +1,6 @@
 language: java
 before_install:
+  - su
   - sudo apt-get remove ant
   - cd /opt/
   - sudo wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.0-bin.tar.gz
