@@ -5,8 +5,8 @@ before_install:
   - sudo wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.0-bin.tar.gz
   - sudo tar xzf apache-ant-1.9.0-bin.tar.gz
   - sudo mv apache-ant-1.9.0 /usr/local/apache-ant
-  - echo 'export ANT_HOME=/usr/local/apache-ant' >> /etc/bashrc
-  - echo 'export PATH=$PATH:/usr/local/apache-ant/bin' >> /etc/bashrc
+  - sudo echo 'export ANT_HOME=/usr/local/apache-ant' >> /etc/bashrc
+  - sudo echo 'export PATH=$PATH:/usr/local/apache-ant/bin' >> /etc/bashrc
   - ant -version
 jdk:
   - oraclejdk8
