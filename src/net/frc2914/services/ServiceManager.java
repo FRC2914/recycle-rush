@@ -22,7 +22,9 @@ public class ServiceManager extends Thread{
 			long frameStart = System.currentTimeMillis();
 			services.parallelStream().forEach((service) -> service.update());
 			try {
-				sleep(frameLength - (System.currentTimeMillis() - frameStart));
+				if(frameLength - (System.currentTimeMillis() - frameStart) > 0){
+					sleep(frameLength - (System.currentTimeMillis() - frameStart));
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
