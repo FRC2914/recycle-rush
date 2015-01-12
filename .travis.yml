@@ -1,4 +1,6 @@
 language: java
+notifications:
+  slack: frc2914:uSdYZyM5Ra0FoGLR6ZJjp1V3
 before_install:
   - sudo apt-get remove ant
   - wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.tar.gz
