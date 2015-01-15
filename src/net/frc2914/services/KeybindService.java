@@ -1,11 +1,25 @@
 package net.frc2914.services;
 
-public class KeybindService extends Service {
+import java.util.ArrayList;
+import java.util.List;
 
+import net.frc2914.joystick.Keybind;
+import edu.wpi.first.wpilibj.Joystick;
+
+public class KeybindService extends Service {
+	private Joystick joystick = new Joystick(0);
+	private List<Keybind> keybinds = new ArrayList<Keybind>();
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-		
+		keybinds.forEach(k -> k.update(joystick));
+	}
+	
+	/**
+	 * adds keybinding
+	 * @param keybind keybind for joystick
+	 */
+	public void addKeybind(Keybind keybind){
+		keybinds.add(keybind);
 	}
 
 	@Override
