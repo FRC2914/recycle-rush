@@ -24,7 +24,7 @@ public class CommandManager {
 							Stream.of(m.getAnnotationsByType(Command.class))
 									.map(a -> (Command)a)
 									.forEach(
-											a -> commands.put(a.value(), new InvokableMethod(m, invoker)));
+											a -> commands.put(a.value().toUpperCase(), new InvokableMethod(m, invoker)));
 						});
 		
 	}
@@ -44,8 +44,12 @@ public class CommandManager {
 		loadCommandsFromClass(clazz, null);
 	}
 	
+	/** 
+	 * calls a given command 
+	 * @param command command with arguments seperated by spaces
+	 */
 	public static void call(String command){
-		String commandName = command.substring(0, command.indexOf(' '));
+		String commandName = command.substring(0, command.indexOf(' ')).toUpperCase();
 		command = command.replaceFirst(commandName, "");
 		command = command.trim();
 		try {

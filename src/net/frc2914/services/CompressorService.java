@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.RobotState;
 
 public class CompressorService extends Service {
 
-	private Compressor compressor = new Compressor();
+	private Compressor compressor = new Compressor(0);
 	private long compressorTimeout;
 	private long compressorStartTime;
 	//set to true if compressor runs for longer than compressorTimeout without stopping
@@ -16,17 +16,18 @@ public class CompressorService extends Service {
 		if(!compressor.getPressureSwitchValue() && RobotState.isEnabled() && !pneumaticProblemDetected){
 			if(compressor.enabled()){
 				if(System.currentTimeMillis() - compressorStartTime > compressorTimeout){
-					compressor.setClosedLoopControl(false);
+					compressor.stop();
 					pneumaticProblemDetected = true;
+					System.out.println("pneumatic problem detected");
 				}
 			}else{
 				compressorStartTime = System.currentTimeMillis();
-				compressor.setClosedLoopControl(true);
+				compressor.start();
 				
 			}
 		}
 	}
-
+	
 	@Override
 	public void init() {
 		compressorTimeout = Long.parseLong(Configuration.getProperty("compressor_timeout"));

@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import net.frc2914.configuration.Configuration;
+import net.frc2914.robot.subsystems.Pneumatics;
 import net.frc2914.services.ServiceManager;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -32,6 +33,7 @@ public class Robot extends IterativeRobot {
 		}
     	System.out.println(Configuration.getProperty("greeting_message"));
     	new ServiceManager().start();
+    	new Pneumatics().init();
     }
 
     /**
@@ -45,7 +47,6 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        System.out.println("teleop!");
     }
     
     /**
