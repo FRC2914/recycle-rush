@@ -8,6 +8,30 @@ public class Keybind {
 	private int button;
 	private String command;
 	private boolean lastState;
+	public enum keybindTriggerType{
+		WHEN_PRESSED(false, true), WHEN_RELEASED(true, false), WHILE_PRESSED(true, true), WHILE_RELEASED(false, false);
+		
+		private boolean lastStateCriteria, currentStateCriteria;
+		
+		keybindTriggerType(boolean lastStateCriteria, boolean currentStateCriteria){
+			this.lastStateCriteria = lastStateCriteria;
+			this.currentStateCriteria = currentStateCriteria;
+		}
+		
+		/**
+		 * test for whether command should be fired
+		 * @param lastState
+		 * @param currentState
+		 * @return
+		 */
+		public boolean test(boolean lastState, boolean currentState){
+			if(lastState == lastStateCriteria && currentState == currentStateCriteria){
+				return true;
+			}
+			return false;
+		}
+	}
+	
 	/**
 	 * create a new keybinding
 	 * @param button joystick button
