@@ -21,9 +21,7 @@ public class Pneumatics extends Subsystem{
 	 */
 	@Command("toggleSolenoid")
 	public static void toggleSolenoid(int channel){
-		System.out.println("toggling solenoid " + channel);
-		Solenoid solenoid = new Solenoid(channel);
-		solenoid.set(!solenoid.get());
+		solenoids[channel].set(!solenoids[channel].get());
 	}
 	
 	/**
