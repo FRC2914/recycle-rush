@@ -8,6 +8,13 @@ import net.frc2914.services.KeybindService;
 import net.frc2914.services.ServiceManager;
 
 public class Pneumatics extends Subsystem{
+	
+	private static Solenoid[] solenoids = new Solenoid[8];
+	static{
+		for(int i = 0; i < solenoids.length; i++){
+			solenoids[i] = new Solenoid(i);
+		}
+	}
 	/**\
 	 * command to toggle a solenoid
 	 * @param channel solenoid port
@@ -26,9 +33,8 @@ public class Pneumatics extends Subsystem{
 	 */
 	@Command("togglePiston")
 	public static void togglePiston(int channel1, int channel2){
-		Solenoid solenoid = new Solenoid(channel1);
-		setSolenoid(channel2, solenoid.get());
-		solenoid.set(!solenoid.get());
+		solenoids[channel2].set(solenoids[channel1].get());
+		solenoids[channel1].set(!solenoids[channel1].get());
 	}
 	
 	/**
@@ -38,7 +44,7 @@ public class Pneumatics extends Subsystem{
 	 */
 	@Command("setSolenoid")
 	public static void setSolenoid(int channel, boolean on){
-		new Solenoid(channel).set(on);
+		solenoids[channel].set(on);
 	}
 
 	@Override
