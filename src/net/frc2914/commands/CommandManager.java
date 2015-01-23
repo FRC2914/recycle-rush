@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import net.frc2914.services.DriveService;
+import net.frc2914.services.ServiceManager;
+
 public class CommandManager {
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface Command {
@@ -15,7 +18,11 @@ public class CommandManager {
 	}
 
 	private static Map<String, InvokableMethod> commands = new HashMap<String, InvokableMethod>();
+	private static boolean acceptDriveCommands = true;
 
+	static{
+		loadCommandsFromClass(CommandManager.class);
+	}
 	private static void loadCommandsFromClass(Class clazz, Object invoker) {
 		Stream.of(clazz.getMethods())
 				.filter(m -> m.getAnnotationsByType(Command.class).length > 0)
@@ -58,5 +65,17 @@ public class CommandManager {
 				| InvocationTargetException e) {
 			e.printStackTrace();
 		}
+		
 	}
+	
+	public static void callDriveCommand(String command){
+		if (acceptDriveCommands)((DriveService) ServiceManager.getService(DriveService.class)).addToQueue(command);
+	}
+	
+	@Command ("acceptDriveCommands")
+	public static void acceptDriveCommands(boolean setAcceptDriveCommands){
+		acceptDriveCommands = setAcceptDriveCommands;
+		if (acceptDriveCommands) ((DriveService) ServiceManager.getService(DriveService.class)).clearQueue();
+	}
+		
 }

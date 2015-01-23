@@ -12,6 +12,7 @@ public class ServiceManager extends Thread {
 	static {
 		services.add(new KeybindService());
 		services.add(new CompressorService());
+		services.add(new DriveService());
 	}
 
 	@Override

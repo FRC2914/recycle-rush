@@ -10,6 +10,7 @@ import net.frc2914.robot.Robot;
 public class DriveService extends Service{
 	private ArrayList<String> queue = new ArrayList<String>();
 	private DriveType driveType;
+
 	private enum DriveType{
 		/**
 		 * Determines tank drive style
@@ -97,6 +98,14 @@ public class DriveService extends Service{
 	 */
 	public void addToQueue(String command) {
 		queue.add(command);
+	}
+	
+	/**
+	 * clear queue perform
+	 * called on toggle command acceptance
+	 */
+	public void clearQueue() {
+		queue.clear();
 	}
 	
 
