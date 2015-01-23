@@ -9,6 +9,7 @@ import net.frc2914.configuration.Configuration;
 import net.frc2914.robot.subsystems.Pneumatics;
 import net.frc2914.services.ServiceManager;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.RobotDrive;
 
 
 /**
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * directory.
  */
 public class Robot extends IterativeRobot {
+	public static final RobotDrive drive = new RobotDrive(0, 1, 2, 3);
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.

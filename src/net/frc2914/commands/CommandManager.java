@@ -26,7 +26,6 @@ public class CommandManager {
 									.forEach(
 											a -> commands.put(a.value().toUpperCase(), new InvokableMethod(m, invoker)));
 						});
-		
 	}
 	/**
 	 * load commands from non static class (only use for singletons)
