@@ -48,7 +48,7 @@ public class Pneumatics extends Subsystem{
 	@Override
 	public void init() {
 		CommandManager.loadCommandsFromClass(getClass());
-		KeybindService keybindService= (KeybindService) ServiceManager.getService(KeybindService.class);
+		KeybindService keybindService = (KeybindService) ServiceManager.getService(KeybindService.class);
 		//bind command "togglePiston 0 1" to joystick button 1
 		keybindService.addKeybind(new Keybind(1, "togglePiston 0 1"));
 	}
