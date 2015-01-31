@@ -3,14 +3,20 @@ package net.frc2914.commands;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+/**
+ *  Allows for the command structure, letting methods be invoked from elsewhere in the code, largely for structural purposes.
+ * 
+ *  @author toby
+ */
 public class InvokableMethod {
 	private Method method;
 	private Object invoker;
 	
 	/**
+	 * Declaration of the class, allowing for calling the method from elsewhere.
 	 * 
-	 * @param method method to be invoked
-	 * @param invoker object from which the method will be invoked from, if null invoker is set to this
+	 * @param method  - method to be invoked
+	 * @param invoker - object from which the method will be invoked from, if null invoker is set to this
 	 */
 	public InvokableMethod(Method method, Object invoker){
 		this.method = method;
@@ -22,8 +28,10 @@ public class InvokableMethod {
 	}
 	
 	/** 
-	 * invokes command with given arguments casting each argument into the given type supplied by the method
-	 * @param args arguments in string form to be parsed
+	 * Invokes command string, by parsing it, getting the arguments, passing each to the correct type as supplied in the args string.
+	 * 
+	 * @param args - arguments in string form to be parsed
+	 * 
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
