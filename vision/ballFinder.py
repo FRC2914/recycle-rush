@@ -17,7 +17,6 @@ saturation_upper = 255
 value_lower = 0
 value_upper = 255
 
-skip_gui = len(sys.argv) >= 2 and sys.argv[1] == "--nogui"
 #set up camera
 camera = cv2.VideoCapture(0)
 if os.name is "nt":#set exposure on windows
@@ -37,20 +36,13 @@ while(1):
     hsvcapture = cv2.cvtColor(capture,cv2.COLOR_BGR2HSV)   
 #    turn it into a binary image representing yellows
     inrangepixels = cv2.inRange(hsvcapture,np.array((hue_lower,saturation_lower,value_lower)),np.array((hue_upper,saturation_upper,value_upper)))#in opencv, HSV is 0-180,0-255,0-255
-
-#    Apply erosion and dilation and erosion again to eliminate noise and fill in gaps
-#     dilate = cv2.dilate(inrangepixels,None,iterations = 5)
-#     erode = cv2.erode(dilate,None,iterations = 10)
-#     dilatedagain = cv2.dilate(erode,None,iterations = 5)   
-
+#    remove single pixels
     inrangepixels = cv2.erode(inrangepixels,None,iterations = 3)
 #   find the contours
-
     tobecontourdetected = inrangepixels.copy()
     contours,hierarchy = cv2.findContours(tobecontourdetected,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
     
-    message = ""
-    
+    message = ""   
     for contour in contours:  
         real_area = cv2.contourArea(contour)
         if real_area > 1500:
@@ -60,15 +52,16 @@ while(1):
             message += str(cx)[:3]
             cv2.circle(capture,(cx,cy),5,(0,0,255),-1)       
     
-    message += ';'        
-    if(message):
-        if len(message)<=8:
-            message += " "*(8-len(message))
+    message += ';'
+    if len(message)<=8:
+        message += " "*(8-len(message))
+        if os.name is "nt":#print on windows, send on linux
+            s.sendto(message,("roborio-2914.local",100))
+        else:
             print message
-            #s.sendto(message,("roborio-2914.local",100))
  
 #    show our image during different stages of processing
-    if(not skip_gui):
+    if os.name is "nt":#only show on windows
         cv2.imshow('capture',capture) 
         cv2.imshow('erodedbinary',inrangepixels)
 
