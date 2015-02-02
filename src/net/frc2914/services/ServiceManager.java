@@ -13,6 +13,7 @@ public class ServiceManager extends Thread {
 		services.add(new KeybindService());
 		services.add(new CompressorService());
 		services.add(new DriveService());
+		services.add(new VisionService());
 	}
 
 	@Override
