@@ -47,8 +47,7 @@ public class DriveService extends Service{
 	 * runs and empties command queue
 	 */
 	public void update() {
-		
-		if(queue.size() > 0){
+		while(queue.size() > 0){
 			CommandManager.call(queue.remove(0));
 		}
 		
@@ -58,10 +57,10 @@ public class DriveService extends Service{
 				Robot.drive.tankDrive(IO.joysticks[1].getY(), IO.joysticks[0].getY());
 				break;
 			case arcade:
-				Robot.drive.arcadeDrive(IO.joysticks[0].getY(), IO.joysticks[0].getTwist());
+				Robot.drive.arcadeDrive(IO.joysticks[0].getY(), -IO.joysticks[0].getTwist());
 				break;
 			case meccanum:
-				double magnitude = Math.sqrt(Math.pow(IO.joysticks[0].getX(), 2) + Math.pow(IO.joysticks[0].getY(), 2));
+				double magnitude = IO.joysticks[0].getMagnitude();
 				double direction = Math.toDegrees(Math.atan(IO.joysticks[0].getY()/IO.joysticks[0].getX()));
 				double rotation  = IO.joysticks[0].getTwist();
 				Robot.drive.mecanumDrive_Polar(magnitude, direction, rotation);

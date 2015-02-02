@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	public static final RobotDrive drive = new RobotDrive(0, 1, 2, 3);
+	public static final RobotDrive drive = new RobotDrive(1, 0);
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
