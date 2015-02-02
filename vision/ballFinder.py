@@ -43,22 +43,47 @@ while(1):
     contours,hierarchy = cv2.findContours(tobecontourdetected,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
     
     message = ""   
-    for contour in contours:  
-        real_area = cv2.contourArea(contour)
-        if real_area > 1500:
-            message += str(real_area/10)[:3]+','
-            M = cv2.moments(contour) #an image moment is the weighted average of a blob
-            cx,cy = int(M['m10']/M['m00']), int(M['m01']/M['m00'])
-            message += str(cx)[:3]
-            cv2.circle(capture,(cx,cy),5,(0,0,255),-1)       
     
-    message += ';'
-    if len(message)<=8:
-        message += " "*(8-len(message))
-        if os.name is "nt":#print on windows, send on linux
-            s.sendto(message,("roborio-2914.local",100))
-        else:
-            print message
+    if len(contours)>0:
+        #find biggest contour
+        tote_sizes = []
+        for tote in contours:
+            tote_sizes.append(cv2.contourArea(tote))
+        biggest_tote_index = 0
+        for i in range(1,len(tote_sizes)):
+            if tote_sizes[i]>tote_sizes[biggest_tote_index]:
+                biggest_tote_index = i    
+        biggest_tote=contours[biggest_tote_index]
+        biggest_tote_size=tote_sizes[biggest_tote_index]      
+        
+        #if biggest tote is big enough
+        if biggest_tote_size > 1500:
+            #find highest and lowest point
+            highest_contour_y=biggest_tote[0][0][1]
+            lowest_contour_y=biggest_tote[0][0][1]
+            for coord in biggest_tote:
+                if coord[0][1]<highest_contour_y:
+                    highest_contour_y = coord[0][1]
+                if coord[0][1]>lowest_contour_y:
+                    lowest_contour_y = coord[0][1]
+            
+            #find centroid
+            tote_centroid = cv2.moments(biggest_tote)        
+            cx,cy = int(tote_centroid['m10']/tote_centroid['m00']), int(tote_centroid['m01']/tote_centroid['m00'])
+            
+            #message is "<x-coord>,<height>;"
+            message += str(cx)[:3]+','
+            message += str(abs(highest_contour_y-lowest_contour_y))[:3]    
+            cv2.line(capture,(0,highest_contour_y),(320,highest_contour_y),(0,0,255),5)
+            cv2.line(capture,(0,lowest_contour_y),(320,lowest_contour_y),(0,0,255),5) 
+        
+        message += ';'
+        if len(message)<=8:
+            message += " "*(8-len(message))
+            if os.name is "nt":#print on windows, send on linux
+                print message
+            else:
+                s.sendto(message,("roborio-2914.local",2914))       
  
 #    show our image during different stages of processing
     if os.name is "nt":#only show on windows
