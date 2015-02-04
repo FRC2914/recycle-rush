@@ -13,7 +13,7 @@ public class CompressorService extends Service {
 	private boolean pneumaticProblemDetected;
 	@Override
 	public void update() {
-		if(!compressor.getPressureSwitchValue() && RobotState.isEnabled() && !pneumaticProblemDetected){
+		if(!compressor.getCompressorNotConnectedFault() && !compressor.getPressureSwitchValue() && RobotState.isEnabled() && !pneumaticProblemDetected){
 			if(compressor.enabled()){
 				if(System.currentTimeMillis() - compressorStartTime > compressorTimeout){
 					compressor.stop();

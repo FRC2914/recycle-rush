@@ -7,33 +7,42 @@ import java.net.SocketException;
 
 public class VisionService extends Service {
 	private DatagramSocket visionSocket;
-	private boolean recieving;
+	private boolean receiving;
 	private int bufferSize = 8;
 	private int objectOffset;
 	private int objectHeight;
 	private boolean isTrackingObject;
+	private final int notTrackingTolerance = 10;
+	private int notTrackingCounter = 0;
 	@Override
-	public void update() {		
-		if(!recieving){
+	public void update() {
+		if (!receiving) {
 			byte[] buffer = new byte[bufferSize];
-			DatagramPacket recievedPacket = new DatagramPacket(buffer, buffer.length);
-			recieving = true;
+			DatagramPacket recievedPacket = new DatagramPacket(buffer,
+					buffer.length);
+			receiving = true;
 			try {
 				visionSocket.receive(recievedPacket);
-				String recievedData = new String(recievedPacket.getData(),0, recievedPacket.getLength());
-				recievedData = recievedData.substring(0, recievedData.lastIndexOf(";")-1);
-				if(recievedData.length() > 0){
-					String[] data = recievedData.split(",");
+				String receivedData = new String(recievedPacket.getData(), 0,
+						recievedPacket.getLength());
+				receivedData = receivedData.substring(0,
+						receivedData.lastIndexOf(";"));
+				System.out.println("received: " + receivedData);
+				if (receivedData.length() > 0) {
+					notTrackingCounter = 0;
+					String[] data = receivedData.split(",");
 					objectOffset = Integer.parseInt(data[0]);
 					objectHeight = Integer.parseInt(data[1]);
 					isTrackingObject = true;
-				}else{
-					isTrackingObject = false;
+				} else {
+					if(notTrackingCounter++ > notTrackingTolerance){
+						isTrackingObject = false;						
+					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
-			}finally{
-				recieving = false;
+			} finally {
+				receiving = false;
 			}
 		}
 	}
@@ -41,20 +50,22 @@ public class VisionService extends Service {
 	@Override
 	public void init() {
 		try {
-			visionSocket = new DatagramSocket(100);
+			visionSocket = new DatagramSocket(2914);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
 
 	}
-	
-	public int getObjectHeight(){
+
+	public int getObjectHeight() {
 		return objectHeight;
 	}
-	public int getObjectOffset(){
+
+	public int getObjectOffset() {
 		return objectOffset;
 	}
-	public boolean isTrackingObject(){
+
+	public boolean isTrackingObject() {
 		return isTrackingObject;
 	}
 

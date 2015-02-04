@@ -67,6 +67,20 @@ public class DriveService extends Service{
 				break;
 		}
 	}
+	
+	public void rotate(float rotation){
+		switch(driveType){
+		case tank:
+			Robot.drive.tankDrive(-rotation, rotation);
+			break;
+		case arcade:
+			Robot.drive.arcadeDrive(0, rotation);
+			break;
+		case meccanum:
+			Robot.drive.mecanumDrive_Polar(0, 0, rotation);
+			break;
+	}
+	}
 	/**
 	 * initiates the variables based on the properties file
 	 * 
