@@ -10,6 +10,7 @@ import net.frc2914.robot.subsystems.Pneumatics;
 import net.frc2914.services.ServiceManager;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Talon;
 
 
 /**
@@ -21,6 +22,8 @@ import edu.wpi.first.wpilibj.RobotDrive;
  */
 public class Robot extends IterativeRobot {
 	public static final RobotDrive drive = new RobotDrive(1, 0);
+	public static final Talon lifter = new Talon(5);
+	public static final Talon hammer = new Talon(2);
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
