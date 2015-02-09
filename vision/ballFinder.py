@@ -10,8 +10,8 @@ import os
 exposure = 10
 height = 240
 width = 320
-hue_lower = 20
-hue_upper = 28
+hue_lower = 15
+hue_upper = 30
 saturation_lower = 0
 saturation_upper = 255
 value_lower = 0
