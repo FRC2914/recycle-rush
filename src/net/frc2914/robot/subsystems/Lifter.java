@@ -7,6 +7,9 @@ import net.frc2914.robot.Robot;
 
 public class Lifter extends Subsystem { 
 
+	/**
+	 * High level command that will lift a tote, regardless of how many are already stacked
+	 */
 	@Command("liftTote")
 	public static void liftTote(){
 		if (!IO.toteNotInPlace.get()){
@@ -17,22 +20,23 @@ public class Lifter extends Subsystem {
 		
 	}
 	
+	/**
+	 * Sends instructions to raise the arms until the top limit switch is depressed
+	 */
 	@Command("liftUp")
 	public static void liftUp() {
 		long start = System.currentTimeMillis();
 		Robot.lifter.set(.5); // @TODO find right speed
-		while (IO.lifterNotHigh.get() && start + 5000 < System.currentTimeMillis())
+		while (IO.lifterNotHigh.get() || start + 5000 < System.currentTimeMillis()){}
 		Robot.lifter.set(0); 
 	}
 
 	@Command("liftDown")
 	public static void liftDown() {
 		long start = System.currentTimeMillis();
+		CommandManager.call("unclamp");
 		Robot.lifter.set(-.5); // @TODO find right speed
-		while (IO.lifterNotLow.get() && start + 5000 < System.currentTimeMillis()){
-			if (!IO.toteNotInPlace.get() && start + 500 < System.currentTimeMillis())//@TODO fix timing
-				CommandManager.call("unclamp");
-		}
+		while (IO.lifterNotLow.get() || start + 5000 < System.currentTimeMillis()){}
 		Robot.lifter.set(0);
 	}
 	

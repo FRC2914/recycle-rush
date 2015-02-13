@@ -4,6 +4,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -86,17 +87,33 @@ public class CommandManager {
 	 */
 	public static void call(String command) {
 		for (String specificCommand : command.split(";")) {
-			String commandName = specificCommand.substring(0, specificCommand.indexOf(' '))
-					.toUpperCase();
-			specificCommand = specificCommand.replaceFirst(commandName, "");
-			specificCommand = specificCommand.trim();
-			try {
-				System.out.println("command: " + commandName);
-				commands.get(commandName).invoke(specificCommand.split(" "));
-			} catch (IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException e) {
-				e.printStackTrace();
+			ArrayList<String> simultaneousCommands = new ArrayList<String>();
+			for (String simultaneousCommand : specificCommand.split("&&")) {
+				String commandName = simultaneousCommand.substring(0,
+						simultaneousCommand.indexOf(' ')).toUpperCase();
+				simultaneousCommand = simultaneousCommand.replaceFirst(
+						commandName, "");
+				simultaneousCommand = simultaneousCommand.trim();
+				try {
+					System.out.println("command: " + commandName);
+					simultaneousCommands.add(commandName + ":"
+							+ simultaneousCommand);
+					commands.get(commandName).invoke(
+							simultaneousCommand.split(" "));
+				} catch (IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException e) {
+					e.printStackTrace();
+				}
 			}
+			simultaneousCommands.parallelStream().forEach((s) -> {
+				String[] commandBody = s.split(":")[1].split(" ");
+				try {
+					commands.get(s.split(":")[0]).invoke(commandBody);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
 		}
 
 	}
