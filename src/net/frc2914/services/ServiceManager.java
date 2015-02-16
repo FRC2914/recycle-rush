@@ -13,7 +13,7 @@ public class ServiceManager extends Thread {
 		services.add(new KeybindService());
 		services.add(new CompressorService());
 		services.add(new DriveService());
-		services.add(new VisionService());
+//		services.add(new VisionService());
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class ServiceManager extends Thread {
 				.getProperty("frame_length"));
 		while (true) {
 			long frameStart = System.currentTimeMillis();
-			services.parallelStream().forEach((service) -> service.update());
+			services.parallelStream().forEach((service) -> {service.update();});
 			try {
 				if (frameLength - (System.currentTimeMillis() - frameStart) > 0) {
 					sleep(frameLength

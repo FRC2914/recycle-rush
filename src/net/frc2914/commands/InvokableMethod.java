@@ -44,8 +44,10 @@ public class InvokableMethod {
 			if(parameterType.equals(int.class)){
 				parameters[i] = Integer.parseInt(args[i]);
 				System.out.println("parsing " + args[i] + " as integer");
-			}else if(parameterType.equals(Double.class)){
+			}else if(parameterType.equals(double.class)){
 				parameters[i] = Double.parseDouble(args[i]);
+			}else if(parameterType.equals(String.class)){
+				parameters[i] = (String)args[i];
 			}else{
 				parameters[i] = args[i];
 			}
@@ -54,5 +56,9 @@ public class InvokableMethod {
 			invoker = this;
 		}
 		method.invoke(invoker, parameters);
+	}
+	
+	public String getCommand(){
+		return method.getName();
 	}
 }

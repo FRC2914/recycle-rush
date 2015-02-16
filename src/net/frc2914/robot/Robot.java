@@ -7,6 +7,7 @@ import java.io.IOException;
 import net.frc2914.commands.CommandManager;
 import net.frc2914.configuration.Configuration;
 import net.frc2914.robot.subsystems.Pneumatics;
+import net.frc2914.robot.subsystems.Subsystems;
 import net.frc2914.services.ServiceManager;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -21,8 +22,9 @@ import edu.wpi.first.wpilibj.Talon;
  */
 public class Robot extends IterativeRobot {
 	public static final RobotDrive drive = new RobotDrive(1, 0);
-	public static final Talon lifter = new Talon(5);
 	public static final Talon hammer = new Talon(2);
+	public static final Talon lifterRight = new Talon(5);
+	public static final Talon lifterLeft = new Talon(3);
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -37,9 +39,10 @@ public class Robot extends IterativeRobot {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println(Configuration.getProperty("greeting_message"));
+//		System.out.println(Configuration.getProperty("greeting_message"));
 		new ServiceManager().start();
-		new Pneumatics().init();
+		Subsystems.init();
+		CommandManager.call("setlights depleted");
 	}
 
 	@Override
@@ -48,8 +51,9 @@ public class Robot extends IterativeRobot {
 		super.autonomousInit();
 		//if(!IO.toteNotInPlace.get())//TODO might break everyththing
 		//drive(0);
+		CommandManager.call("seLights DEPLETE");
 		for (int i = 0; i < 3; i++)
-			CommandManager.callDriveCommand("alignWithTote;liftTote;drive .5;wait .25;swingout;wait .25;");
+			CommandManager.callDriveCommand("alignWithTote;driveToTote;liftTote;swingout;");
 	}
 
 	/**

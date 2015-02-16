@@ -5,6 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -86,36 +87,110 @@ public class CommandManager {
 	 *            - String with name and arguments seperated by spaces
 	 */
 	public static void call(String command) {
-		for (String specificCommand : command.split(";")) {
-			ArrayList<String> simultaneousCommands = new ArrayList<String>();
-			for (String simultaneousCommand : specificCommand.split("&&")) {
-				String commandName = simultaneousCommand.substring(0,
-						simultaneousCommand.indexOf(' ')).toUpperCase();
-				simultaneousCommand = simultaneousCommand.replaceFirst(
-						commandName, "");
-				simultaneousCommand = simultaneousCommand.trim();
+		String[] blocks = splitToBlocks(command);
+		for(String block : blocks){
+			String[] simultaneousBlocks = splitToSimultaneousBlocks(block);
+			if(simultaneousBlocks.length > 1){
+				Stream.of(simultaneousBlocks).parallel().forEach((simultaneousCommand) ->{
+					simultaneousCommand = simultaneousCommand.trim();
+					call(simultaneousCommand);
+				});
+			}else{
+				String[] parsedCommand = simultaneousBlocks[0].trim().split(" ", 2);
 				try {
-					System.out.println("command: " + commandName);
-					simultaneousCommands.add(commandName + ":"
-							+ simultaneousCommand);
-					commands.get(commandName).invoke(
-							simultaneousCommand.split(" "));
+					if(parsedCommand.length > 1){
+						parsedCommand[0] = parsedCommand[0].toUpperCase();
+						commands.get(parsedCommand[0]).invoke(parsedCommand[1].trim().split(" "));
+					}else{
+						parsedCommand[0] = parsedCommand[0].toUpperCase();
+						commands.get(parsedCommand[0]).invoke();
+					}
 				} catch (IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException e) {
-					e.printStackTrace();
-				}
-			}
-			simultaneousCommands.parallelStream().forEach((s) -> {
-				String[] commandBody = s.split(":")[1].split(" ");
-				try {
-					commands.get(s.split(":")[0]).invoke(commandBody);
-				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			});
+			}
 		}
 
+	}
+	
+	private static String[] splitToBlocks(String command){
+		command = command.trim();
+		ArrayList<String> blocks = new ArrayList<String>();
+		int unclosedParens = 0;
+		String currentBlock = "";
+		boolean simultaneousBlock = false;
+		for(int i = 0; i < command.length(); i++){
+			char curr = command.charAt(i);
+			switch(curr){
+			case '(':
+				unclosedParens++;
+				if(unclosedParens == 1 && !simultaneousBlock){
+					continue;
+				}
+			break;
+			case ')':
+				unclosedParens--;
+				if(unclosedParens == 0 && !simultaneousBlock){
+					continue;
+				}
+			break;
+			case ';':
+				if(unclosedParens == 0){
+					blocks.add(currentBlock.trim());
+					currentBlock = "";
+					simultaneousBlock = false;
+					continue;
+				}
+			break;
+			case '&':
+				if(command.charAt(i+1) == '&' && unclosedParens == 0){
+					simultaneousBlock = true;
+				}
+			}
+			currentBlock += curr;
+		}
+		if(command.charAt(command.length() - 1) != ';'){
+			blocks.add(currentBlock);
+		}
+		return (String[])blocks.toArray(new String[blocks.size()]);
+	}
+	
+	private static String[] splitToSimultaneousBlocks(String command){
+		command = command.trim();
+		ArrayList<String> blocks = new ArrayList<String>();
+		int unclosedParens = 0;
+		String currentBlock = "";
+		for(int i = 0; i < command.length(); i++){
+			char curr = command.charAt(i);
+			switch(curr){
+			case '(':
+				unclosedParens++;
+				if(unclosedParens == 1){
+					continue;
+				}
+			break;
+			case ')':
+				unclosedParens--;
+				if(unclosedParens == 0){
+					continue;
+				}
+			break;
+			case '&':
+				if(command.charAt(i+1) == '&' && unclosedParens == 0){
+					i++;
+					blocks.add(currentBlock.trim());
+					currentBlock = "";
+					continue;
+				}
+			}
+			currentBlock += curr;
+		}
+		if(command.charAt(command.length() - 1) != ';'){
+			blocks.add(currentBlock);
+		}
+		return (String[])blocks.toArray(new String[blocks.size()]);
 	}
 
 	/**

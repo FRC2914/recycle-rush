@@ -7,8 +7,8 @@ public class IO {
 	
 	public static final Joystick[] joysticks = new Joystick[4];
 	
-	public static final DigitalInput lifterNotHigh = new DigitalInput(1);//@TODO fix pot vals
-	public static final DigitalInput lifterNotLow  = new DigitalInput(2);//@TODO fix pot vals
+	public static final DigitalInput lifterBottom = new DigitalInput(0);//@TODO fix pot vals
+	public static final DigitalInput lifterTop  = new DigitalInput(1);//@TODO fix pot vals
 	
 	public static final DigitalInput armNotRetracted = new DigitalInput(3);//@TODO fix pot vals
 

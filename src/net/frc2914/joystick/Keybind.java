@@ -65,6 +65,7 @@ public class Keybind {
 	 */
 	public void update(Joystick joystick) {
 		if (triggerType.test(lastState, joystick.getRawButton(button))) {
+			System.out.println("invoking: " + command);
 			CommandManager.call(command);
 		}
 		lastState = joystick.getRawButton(button);

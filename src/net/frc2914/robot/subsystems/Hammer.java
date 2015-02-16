@@ -14,6 +14,7 @@ public class Hammer extends Subsystem {
 		
 		if (!IO.armNotRetracted.get())
 			Robot.hammer.set(1); // @TODO find right speed
+		CommandManager.call("setLights FLASHRED");
 		while (System.currentTimeMillis() < timeout ){}
 		
 		Robot.hammer.set(0); 

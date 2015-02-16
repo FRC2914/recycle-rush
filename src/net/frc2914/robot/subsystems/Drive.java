@@ -13,7 +13,7 @@ public class Drive extends Subsystem {
 	public static void drive(double magnitude) {
 		driveService.drive(magnitude);
 	}
-	@Command("drivetoTote")
+	@Command("driveToTote")
 	public static void drivetoTote() {
 		driveService.drive(.5); //TODO Placeholder val
 		while (IO.toteNotInPlace.get()){}

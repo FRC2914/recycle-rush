@@ -47,10 +47,11 @@ public class DriveService extends Service{
 	 * runs and empties command queue
 	 */
 	public void update() {
-		while(queue.size() > 0){
-			CommandManager.call(queue.remove(0));
-		}
-		
+//		while(queue.size() > 0){
+//			System.out.println("driving");
+//			CommandManager.call(queue.remove(0));
+//		}
+		Robot.drive.setSafetyEnabled(false);
 		
 		switch(driveType){
 			case tank:
