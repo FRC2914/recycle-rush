@@ -18,8 +18,8 @@ public class Lifter extends Subsystem {
 	public static void liftTote(){
 		if (!IO.toteNotInPlace.get()){
 			if (IO.lifterBottom.get())
-				CommandManager.call("liftDown");
-			CommandManager.call("clamp;liftUp");
+				CommandManager.call("unclamp;liftbottom");
+			CommandManager.call("clamp;lifttop");
 		}
 		
 	}
@@ -39,7 +39,7 @@ public class Lifter extends Subsystem {
 	@Command("liftUp")
 	public static void liftUp(){
 		if(IO.lifterTop.get()){
-			lift(-.5);
+			lift(-.8);
 		}else{
 			lift(0);
 		}
@@ -52,15 +52,34 @@ public class Lifter extends Subsystem {
 	@Command("liftDown")
 	public static void liftDown(){
 		if(IO.lifterBottom.get()){
-			lift(.5);
+			lift(.8);
 		}else{
 			lift(0);
 		}
 	}
+	@Command("liftBottom")
+	public static void liftBottom(){
+		while(IO.lifterBottom.get()){
+			lift(.8);
+		}
+		lift(0);
+	}
+	@Command("liftTop")
+	public static void liftTop(){
+		while(IO.lifterTop.get()){
+			lift(-.8);
+		}
+		lift(0);
+	}
 	
 	public static final void lift(double magnitude){
-		Robot.lifterLeft.set(magnitude * 1.1);
-		Robot.lifterRight.set(-magnitude);
+		if(magnitude < 0){
+			Robot.lifterLeft.set(magnitude * 1.2);
+			Robot.lifterRight.set(magnitude);
+		}else{
+			Robot.lifterLeft.set(magnitude);
+			Robot.lifterRight.set(magnitude);
+		}
 	}
 	
 //	@Command("liftDown")
@@ -89,7 +108,7 @@ public class Lifter extends Subsystem {
 		CommandManager.loadCommandsFromClass(getClass());
 		KeybindService keybindService = (KeybindService) ServiceManager.getService(KeybindService.class);
 		//bind command "togglePiston 0 1" to joystick button 1
-		keybindService.addKeybind(new Keybind(5, "liftup", keybindTriggerType.WHILE_PRESSED));
+		keybindService.addKeybind(new Keybind(5, "liftup",   keybindTriggerType.WHILE_PRESSED));
 		keybindService.addKeybind(new Keybind(3, "liftdown", keybindTriggerType.WHILE_PRESSED));
 		keybindService.addKeybind(new Keybind(5, "liftstop", keybindTriggerType.WHEN_RELEASED));
 		keybindService.addKeybind(new Keybind(3, "liftstop", keybindTriggerType.WHEN_RELEASED));

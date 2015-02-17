@@ -21,10 +21,10 @@ import edu.wpi.first.wpilibj.Talon;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	public static final RobotDrive drive = new RobotDrive(1, 0);
-	public static final Talon hammer = new Talon(2);
+	public static final RobotDrive drive  = new RobotDrive(1, 0);
+	public static final Talon hammer      = new Talon(2);
 	public static final Talon lifterRight = new Talon(5);
-	public static final Talon lifterLeft = new Talon(3);
+	public static final Talon lifterLeft  = new Talon(3);
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -53,7 +53,7 @@ public class Robot extends IterativeRobot {
 		//drive(0);
 		CommandManager.call("seLights DEPLETE");
 		for (int i = 0; i < 3; i++)
-			CommandManager.callDriveCommand("alignWithTote;driveToTote;liftTote;swingout;");
+			CommandManager.callDriveCommand("alignWithTote;driveToTote;knockbin;liftTote;");
 	}
 
 	/**

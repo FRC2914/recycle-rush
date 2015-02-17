@@ -107,6 +107,7 @@ public class CommandManager {
 					}
 				} catch (IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException e) {
+					System.out.println(parsedCommand[0] + " " + parsedCommand[1]);
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
